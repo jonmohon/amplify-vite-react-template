@@ -1,21 +1,95 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import './Sidebar.css'; // Add custom styles here
+import { useState } from 'react';
+import { Drawer, List, ListItem, ListItemIcon, ListItemText, Collapse, Typography } from '@mui/material';
+import { Dashboard, ShoppingCart, Inventory, Settings, Analytics, Sms, Build } from '@mui/icons-material';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
 
-const Sidebar: React.FC = () => {
+const Sidebar = () => {
+  const [openInventory, setOpenInventory] = useState(false);
+  const [openAccounts, setOpenAccounts] = useState(false);
+
+  const toggleInventory = () => setOpenInventory(!openInventory);
+  const toggleAccounts = () => setOpenAccounts(!openAccounts);
+
+  const menuItems = [
+    { text: 'Dashboard', icon: <Dashboard /> },
+    { text: 'Orders', icon: <ShoppingCart /> },
+    {
+      text: 'Inventory',
+      icon: <Inventory />,
+      expandable: true,
+      open: openInventory,
+      onClick: toggleInventory,
+      subItems: [
+        { text: 'Products' },
+        { text: 'Packages' },
+        { text: 'Locations' },
+      ],
+    },
+    { text: 'Analytics', icon: <Analytics /> },
+    { text: 'Email & SMS', icon: <Sms /> },
+    { text: 'Settings', icon: <Settings /> },
+    { text: 'AI Tool', icon: <Build /> },
+  ];
+
   return (
-    <div className="sidebar">
-      <h2>Nexvato Admin</h2>
-      <nav>
-        <ul>
-          <li><Link to="/">Home</Link></li>
-          <li><Link to="/dashboard">Dashboard</Link></li>
-          <li><Link to="/settings">Settings</Link></li>
-          <li><Link to="/profile">Profile</Link></li>
-          <li><Link to="/reports">Reports</Link></li>
-        </ul>
-      </nav>
-    </div>
+    <Drawer
+      variant="permanent"
+      sx={{
+        width: 240,
+        flexShrink: 0,
+        '& .MuiDrawer-paper': {
+          width: 240,
+          boxSizing: 'border-box',
+          backgroundColor: '#1a1f36',
+          color: 'white',
+        },
+      }}
+    >
+      <Typography variant="h6" sx={{ padding: 2, color: 'white' }}>
+        MyApp
+      </Typography>
+      <List>
+        {menuItems.map((item, index) => (
+          <>
+            <ListItem
+              component="button"
+              key={index}
+              onClick={item.onClick}
+              sx={{
+                color: 'white',
+                padding: '10px 20px',
+                '&:hover': { backgroundColor: '#333' },
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <ListItemIcon sx={{ color: 'white' }}>{item.icon}</ListItemIcon>
+              <ListItemText primary={item.text} />
+              {item.expandable && (item.open ? <ExpandLess /> : <ExpandMore />)}
+            </ListItem>
+            {item.expandable && (
+              <Collapse in={item.open} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                  {item.subItems.map((subItem, subIndex) => (
+                    <ListItem
+                      key={`${index}-${subIndex}`}
+                      sx={{
+                        paddingLeft: 4,
+                        color: 'white',
+                        '&:hover': { backgroundColor: '#333' },
+                      }}
+                    >
+                      <ListItemText primary={subItem.text} />
+                    </ListItem>
+                  ))}
+                </List>
+              </Collapse>
+            )}
+          </>
+        ))}
+      </List>
+    </Drawer>
   );
 };
 
