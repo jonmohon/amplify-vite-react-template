@@ -6,7 +6,7 @@ function App() {
   return (
     <main>
       {/* Other components */}
-      <button onClick={signOut}>Sign out test</button>
+      <button onClick={signOut}>Sign out test2</button>
     </main>
   );
 }
