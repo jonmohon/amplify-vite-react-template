@@ -13,7 +13,7 @@ import {
   Typography,
   Divider,
   Button,
-  
+  Box,
 } from '@mui/material';
 import { Dashboard, Campaign, Email, Sms, Analytics, Report, Settings } from '@mui/icons-material';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -23,43 +23,16 @@ import { useAuthenticator } from '@aws-amplify/ui-react';
 
 const drawerWidth = 240;
 
-const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
-  open?: boolean;
-}>(({ theme, open }) => ({
+const MainContent = styled('div')(({ theme }) => ({
   flexGrow: 1,
   padding: theme.spacing(3),
-  transition: theme.transitions.create('margin', {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  marginLeft: `-${drawerWidth}px`,
-  ...(open && {
-    marginLeft: 0,
-  }),
+  marginTop: theme.spacing(8), // adjust for the header height
+  backgroundColor: '#fff',
+  minHeight: 'calc(100vh - 64px)', // adjust for header height
 }));
 
-const AppBarStyled = styled(AppBar, {
-  shouldForwardProp: (prop) => prop !== 'open',
-})<{
-  open?: boolean;
-}>(({ theme, open }) => ({
+const AppBarStyled = styled(AppBar)(({ theme }) => ({
   zIndex: theme.zIndex.drawer + 1,
-  transition: theme.transitions.create(['width', 'margin'], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  ...(open && {
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: `${drawerWidth}px`,
-  }),
-}));
-
-const DrawerHeader = styled('div')(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  padding: theme.spacing(0, 1),
-  ...theme.mixins.toolbar,
-  justifyContent: 'flex-end',
 }));
 
 const Sidebar: React.FC = () => {
@@ -85,7 +58,7 @@ const Sidebar: React.FC = () => {
   return (
     <div style={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBarStyled position="fixed" open={open}>
+      <AppBarStyled position="fixed">
         <Toolbar>
           <IconButton
             color="inherit"
@@ -119,11 +92,7 @@ const Sidebar: React.FC = () => {
           },
         }}
       >
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerToggle} sx={{ color: 'white' }}>
-            {theme.direction === 'ltr' ? '<' : '>'}
-          </IconButton>
-        </DrawerHeader>
+        <Toolbar />
         <Divider />
         <List>
           {menuItems.map((item, index) => (
@@ -143,10 +112,14 @@ const Sidebar: React.FC = () => {
           ))}
         </List>
       </Drawer>
-      <Main open={open}>
-        <DrawerHeader />
-        {/* Add your main content here */}
-      </Main>
+      <MainContent>
+        <Box sx={{ padding: 3, bgcolor: '#fff', boxShadow: 3, borderRadius: 2 }}>
+          <Typography variant="h4" align="center" gutterBottom>
+            {pageTitle}
+          </Typography>
+          {/* Main content goes here */}
+        </Box>
+      </MainContent>
     </div>
   );
 };
