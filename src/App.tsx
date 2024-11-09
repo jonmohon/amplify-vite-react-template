@@ -1,12 +1,14 @@
+import React from 'react';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 
 function App() {
-  const { signOut } = useAuthenticator();
+  const { user, signOut } = useAuthenticator();
 
   return (
     <main>
-      {/* Other components */}
-      <button onClick={signOut}>Sign out test2</button>
+      <h1>Welcome, {user?.username}!</h1>
+      <p>Email: {user?.attributes?.email}</p>
+      <button onClick={signOut}>Sign Out</button>
     </main>
   );
 }
