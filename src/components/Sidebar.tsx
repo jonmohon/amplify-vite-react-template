@@ -13,9 +13,9 @@ import {
   Typography,
   Divider,
   Button,
-  Box,
+  
 } from '@mui/material';
-import { Dashboard, ShoppingCart, Inventory, Settings } from '@mui/icons-material';
+import { Dashboard, Campaign, Email, Sms, Analytics, Report, Settings } from '@mui/icons-material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { styled, useTheme } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
@@ -33,12 +33,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
     duration: theme.transitions.duration.leavingScreen,
   }),
   marginLeft: `-${drawerWidth}px`,
-  backgroundColor: '#fff',
   ...(open && {
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
     marginLeft: 0,
   }),
 }));
@@ -48,17 +43,14 @@ const AppBarStyled = styled(AppBar, {
 })<{
   open?: boolean;
 }>(({ theme, open }) => ({
-  transition: theme.transitions.create(['margin', 'width'], {
+  zIndex: theme.zIndex.drawer + 1,
+  transition: theme.transitions.create(['width', 'margin'], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
   ...(open && {
     width: `calc(100% - ${drawerWidth}px)`,
     marginLeft: `${drawerWidth}px`,
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
   }),
 }));
 
@@ -73,21 +65,20 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 const Sidebar: React.FC = () => {
   const theme = useTheme();
   const { signOut } = useAuthenticator();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true); // Set to true for the drawer to be open initially
   const [pageTitle, setPageTitle] = useState("Dashboard");
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
+  const handleDrawerToggle = () => {
+    setOpen(!open);
   };
 
   const menuItems = [
     { text: 'Dashboard', icon: <Dashboard />, link: '/dashboard' },
-    { text: 'Orders', icon: <ShoppingCart />, link: '/orders' },
-    { text: 'Inventory', icon: <Inventory />, link: '/inventory' },
+    { text: 'Campaigns', icon: <Campaign />, link: '/campaigns' },
+    { text: 'Email', icon: <Email />, link: '/email' },
+    { text: 'SMS', icon: <Sms />, link: '/sms' },
+    { text: 'Analytics', icon: <Analytics />, link: '/analytics' },
+    { text: 'Reporting', icon: <Report />, link: '/reporting' },
     { text: 'Settings', icon: <Settings />, link: '/settings' },
   ];
 
@@ -99,23 +90,24 @@ const Sidebar: React.FC = () => {
           <IconButton
             color="inherit"
             aria-label="open drawer"
-            onClick={handleDrawerOpen}
             edge="start"
-            sx={{ mr: 2, ...(open && { display: 'none' }) }}
+            onClick={handleDrawerToggle}
+            sx={{ mr: 2 }}
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             {pageTitle}
           </Typography>
-          <Box>
-            <Button color="inherit" onClick={signOut}>
-              Sign Out
-            </Button>
-          </Box>
+          <Button color="inherit" onClick={signOut}>
+            Sign Out
+          </Button>
         </Toolbar>
       </AppBarStyled>
       <Drawer
+        variant="persistent"
+        anchor="left"
+        open={open}
         sx={{
           width: drawerWidth,
           flexShrink: 0,
@@ -123,15 +115,12 @@ const Sidebar: React.FC = () => {
             width: drawerWidth,
             boxSizing: 'border-box',
             backgroundColor: theme.palette.primary.main,
-            color: theme.palette.secondary.main,
+            color: 'white',
           },
         }}
-        variant="persistent"
-        anchor="left"
-        open={open}
       >
         <DrawerHeader>
-          <IconButton onClick={handleDrawerClose} sx={{ color: 'white' }}>
+          <IconButton onClick={handleDrawerToggle} sx={{ color: 'white' }}>
             {theme.direction === 'ltr' ? '<' : '>'}
           </IconButton>
         </DrawerHeader>
@@ -146,7 +135,6 @@ const Sidebar: React.FC = () => {
               sx={{
                 color: 'white',
                 '&:hover': { backgroundColor: theme.palette.primary.dark },
-                textDecoration: 'none',
               }}
             >
               <ListItemIcon sx={{ color: 'white' }}>{item.icon}</ListItemIcon>
@@ -155,6 +143,10 @@ const Sidebar: React.FC = () => {
           ))}
         </List>
       </Drawer>
+      <Main open={open}>
+        <DrawerHeader />
+        {/* Add your main content here */}
+      </Main>
     </div>
   );
 };
