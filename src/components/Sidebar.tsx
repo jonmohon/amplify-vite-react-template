@@ -6,10 +6,8 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 
 const Sidebar = () => {
   const [openInventory, setOpenInventory] = useState(false);
-  const [openAccounts, setOpenAccounts] = useState(false);
 
   const toggleInventory = () => setOpenInventory(!openInventory);
-  const toggleAccounts = () => setOpenAccounts(!openAccounts);
 
   const menuItems = [
     { text: 'Dashboard', icon: <Dashboard /> },
@@ -41,8 +39,8 @@ const Sidebar = () => {
         '& .MuiDrawer-paper': {
           width: 240,
           boxSizing: 'border-box',
-          backgroundColor: '#1a1f36',
-          color: 'white',
+          backgroundColor: '#0A89FF', // Set primary blue background color
+          color: 'white', // Set text color to white for contrast
         },
       }}
     >
@@ -59,7 +57,7 @@ const Sidebar = () => {
               sx={{
                 color: 'white',
                 padding: '10px 20px',
-                '&:hover': { backgroundColor: '#333' },
+                '&:hover': { backgroundColor: '#005f99' }, // Darker blue on hover
                 display: 'flex',
                 alignItems: 'center',
               }}
@@ -77,7 +75,7 @@ const Sidebar = () => {
                       sx={{
                         paddingLeft: 4,
                         color: 'white',
-                        '&:hover': { backgroundColor: '#333' },
+                        '&:hover': { backgroundColor: '#005f99' }, // Darker blue on hover
                       }}
                     >
                       <ListItemText primary={subItem.text} />

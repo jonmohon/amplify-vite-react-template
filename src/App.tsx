@@ -1,19 +1,21 @@
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import Sidebar from './components/Sidebar';
-import { CssBaseline, Box } from '@mui/material';
+import { ThemeProvider } from '@mui/material/styles';
+import theme from './theme/theme';
 
 function App() {
   const { user, signOut } = useAuthenticator();
 
   return (
-    <Box sx={{ display: 'flex', backgroundColor: '#f0f2f5' }}> {/* Light background color */}
-      <CssBaseline />
-      <Sidebar /> {/* Sidebar on the left */}
-      <Box component="main" sx={{ flexGrow: 1, p: 3, backgroundColor: '#ffffff', minHeight: '100vh' }}> {/* Main area */}
-        <h1>Welcome, {user?.username}!</h1>
-        <button onClick={signOut}>Sign Out</button>
-      </Box>
-    </Box>
+    <ThemeProvider theme={theme}>
+      <div style={{ display: 'flex', backgroundColor: theme.palette.background.default }}>
+        <Sidebar /> {/* Sidebar on the left */}
+        <main style={{ padding: '20px', flex: 1 }}>
+          <h1>Welcome, {user?.username}!</h1>
+          <button onClick={signOut}>Sign Out</button>
+        </main>
+      </div>
+    </ThemeProvider>
   );
 }
 
