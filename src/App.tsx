@@ -1,8 +1,9 @@
 // src/App.tsx
+import React from 'react';
 import { ThemeProvider } from '@mui/material/styles';
-import { Routes, Route } from 'react-router-dom';
 import theme from './theme/theme';
 import Sidebar from './components/Sidebar';
+import { Routes, Route } from 'react-router-dom';
 import Dashboard from './pages/Dashboard';
 import Campaigns from './pages/Campaigns';
 import Email from './pages/Email';
@@ -16,7 +17,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <div style={{ display: 'flex' }}>
         <Sidebar />
-        <main style={{ padding: '20px', flex: 1, backgroundColor: '#f4f6f8' }}>
+        <main style={{ flexGrow: 1, padding: '20px', backgroundColor: '#f4f6f8', minHeight: '100vh' }}>
           <Routes>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/campaigns" element={<Campaigns />} />

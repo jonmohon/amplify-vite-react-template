@@ -2,7 +2,7 @@
 import React from 'react';
 
 const Campaigns: React.FC = () => {
-  return <h1>Campaigns</h1>;
+    return null;
 };
 
 export default Campaigns;

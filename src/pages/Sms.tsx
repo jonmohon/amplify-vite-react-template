@@ -2,7 +2,7 @@
 import React from 'react';
 
 const SMS: React.FC = () => {
-  return <h1>SMS</h1>;
+  return null;
 };
 
 export default SMS;

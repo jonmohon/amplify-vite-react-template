@@ -23,22 +23,10 @@ import { useAuthenticator } from '@aws-amplify/ui-react';
 
 const drawerWidth = 240;
 
-const MainContent = styled('div')(({ theme }) => ({
-  flexGrow: 1,
-  padding: theme.spacing(3),
-  marginTop: theme.spacing(8), // adjust for the header height
-  backgroundColor: '#fff',
-  minHeight: 'calc(100vh - 64px)', // adjust for header height
-}));
-
-const AppBarStyled = styled(AppBar)(({ theme }) => ({
-  zIndex: theme.zIndex.drawer + 1,
-}));
-
 const Sidebar: React.FC = () => {
   const theme = useTheme();
   const { signOut } = useAuthenticator();
-  const [open, setOpen] = useState(true); // Set to true for the drawer to be open initially
+  const [open, setOpen] = useState(true);
   const [pageTitle, setPageTitle] = useState("Dashboard");
 
   const handleDrawerToggle = () => {
@@ -58,7 +46,13 @@ const Sidebar: React.FC = () => {
   return (
     <div style={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBarStyled position="fixed">
+      <AppBar
+        position="fixed"
+        sx={{
+          zIndex: theme.zIndex.drawer + 1,
+          backgroundColor: theme.palette.primary.main,
+        }}
+      >
         <Toolbar>
           <IconButton
             color="inherit"
@@ -76,7 +70,7 @@ const Sidebar: React.FC = () => {
             Sign Out
           </Button>
         </Toolbar>
-      </AppBarStyled>
+      </AppBar>
       <Drawer
         variant="persistent"
         anchor="left"
@@ -94,7 +88,7 @@ const Sidebar: React.FC = () => {
       >
         <Toolbar />
         <Divider />
-        <List>
+        <List sx={{ padding: 0 }}>
           {menuItems.map((item, index) => (
             <ListItem
               key={index}
@@ -103,7 +97,11 @@ const Sidebar: React.FC = () => {
               onClick={() => setPageTitle(item.text)}
               sx={{
                 color: 'white',
+                backgroundColor: theme.palette.primary.main,
                 '&:hover': { backgroundColor: theme.palette.primary.dark },
+                width: '100%',
+                padding: '12px 16px',
+                textDecoration: 'none',
               }}
             >
               <ListItemIcon sx={{ color: 'white' }}>{item.icon}</ListItemIcon>
@@ -112,14 +110,10 @@ const Sidebar: React.FC = () => {
           ))}
         </List>
       </Drawer>
-      <MainContent>
-        <Box sx={{ padding: 3, bgcolor: '#fff', boxShadow: 3, borderRadius: 2 }}>
-          <Typography variant="h4" align="center" gutterBottom>
-            {pageTitle}
-          </Typography>
-          {/* Main content goes here */}
-        </Box>
-      </MainContent>
+      <Box component="main" sx={{ flexGrow: 1, p: 3, backgroundColor: '#ffffff' }}>
+        <Toolbar />
+        {/* Main content goes here */}
+      </Box>
     </div>
   );
 };

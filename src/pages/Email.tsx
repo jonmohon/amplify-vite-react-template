@@ -2,7 +2,7 @@
 import React from 'react';
 
 const Email: React.FC = () => {
-  return <h1>Email</h1>;
+  return null;
 };
 
 export default Email;
