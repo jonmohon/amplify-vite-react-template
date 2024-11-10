@@ -1,4 +1,3 @@
-// src/pages/Sms.tsx
 import React, { useState } from 'react';
 import {
   Box,
@@ -100,6 +99,10 @@ const SMS: React.FC = () => {
     console.log('Creating new SMS campaign');
   };
 
+  const handleSendTestMessage = () => {
+    alert('Successful');
+  };
+
   return (
     <Box sx={{ pt: 10, px: 3, backgroundColor: '#f4f6f8', minHeight: '100vh' }}>
       <Typography variant="h4" gutterBottom sx={{ mb: 4, textAlign: 'center' }}>
@@ -111,8 +114,16 @@ const SMS: React.FC = () => {
           color="primary"
           startIcon={<AddIcon />}
           onClick={handleCreateNew}
+          sx={{ mr: 2 }}
         >
           Create New Campaign
+        </Button>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={handleSendTestMessage}
+        >
+          Send Test Message
         </Button>
       </Box>
       <TableContainer component={Paper} sx={{ maxWidth: 1000, margin: '0 auto', boxShadow: 3 }}>

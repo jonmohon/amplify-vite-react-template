@@ -92,14 +92,15 @@ const Sidebar: React.FC = () => {
         <Box
           sx={{
             display: 'flex',
-            justifyContent: 'center',
+            justifyContent: 'left',
             alignItems: 'center',
             padding: '16px',
             marginTop: '50px',
             borderBottom: '1px solid rgba(255, 255, 255, 0.2)',
           }}
         >
-          <img src="http://localhost:5173/logo.png" alt="Nexvato Logo" style={{ width: '70%', height: '45px' }} />
+          <img src="https://nexvato-images.s3.us-east-2.amazonaws.com/admin-images/logo.png" alt="Nexvato Logo" style={{ width: '70%', height: '40px' }} />
+
         </Box>
         
         <Divider />
@@ -127,7 +128,6 @@ const Sidebar: React.FC = () => {
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3, backgroundColor: '#ffffff' }}>
         <Toolbar />
-        {/* Main content goes here */}
       </Box>
     </div>
   );
