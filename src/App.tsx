@@ -1,5 +1,5 @@
 // src/App.tsx
-import { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme/theme';
 import Sidebar from './components/Sidebar';
@@ -16,13 +16,14 @@ import { useAuthenticator } from '@aws-amplify/ui-react';
 function App() {
   const { route } = useAuthenticator((context) => [context.route]);
   const navigate = useNavigate();
+  const [initialLogin, setInitialLogin] = useState(true);
 
-  // Redirect to /dashboard after login
   useEffect(() => {
-    if (route === 'authenticated') {
-      navigate('/dashboard');
+    if (route === 'authenticated' && initialLogin) {
+      setInitialLogin(false); // Set to false after the first redirect
+      navigate('/dashboard'); // Redirect to /dashboard on initial login
     }
-  }, [route, navigate]);
+  }, [route, initialLogin, navigate]);
 
   return (
     <ThemeProvider theme={theme}>
