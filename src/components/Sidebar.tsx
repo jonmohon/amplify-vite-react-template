@@ -17,7 +17,7 @@ import {
 } from '@mui/material';
 import { Dashboard, Campaign, Email, Sms, Analytics, Report, Settings } from '@mui/icons-material';
 import MenuIcon from '@mui/icons-material/Menu';
-import { styled, useTheme } from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 

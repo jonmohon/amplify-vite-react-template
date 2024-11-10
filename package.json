@@ -16,7 +16,11 @@
     "@mui/icons-material": "^6.1.6",
     "@mui/material": "^6.1.6",
     "aws-amplify": "^6.6.6",
+    "chart.js": "^4.4.6",
+    "date-fns": "^3.6.0",
     "react": "^18.2.0",
+    "react-chartjs-2": "^5.2.0",
+    "react-csv": "^2.2.2",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.28.0",
     "recharts": "^2.13.3"
