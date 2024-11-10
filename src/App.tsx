@@ -1,8 +1,9 @@
 // src/App.tsx
+import { useEffect } from 'react';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme/theme';
 import Sidebar from './components/Sidebar';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import Dashboard from './pages/Dashboard';
 import Campaigns from './pages/Campaigns';
 import Email from './pages/Email';
@@ -10,8 +11,19 @@ import SMS from './pages/Sms';
 import Analytics from './pages/Analytics';
 import Reporting from './pages/Reporting';
 import Settings from './pages/Settings';
+import { useAuthenticator } from '@aws-amplify/ui-react';
 
 function App() {
+  const { route } = useAuthenticator((context) => [context.route]);
+  const navigate = useNavigate();
+
+  // Redirect to /dashboard after login
+  useEffect(() => {
+    if (route === 'authenticated') {
+      navigate('/dashboard');
+    }
+  }, [route, navigate]);
+
   return (
     <ThemeProvider theme={theme}>
       <div style={{ display: 'flex' }}>

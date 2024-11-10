@@ -1,4 +1,5 @@
 // src/components/Sidebar.tsx
+
 import React, { useState } from 'react';
 import {
   Drawer,
@@ -51,6 +52,7 @@ const Sidebar: React.FC = () => {
         sx={{
           zIndex: theme.zIndex.drawer + 1,
           backgroundColor: theme.palette.primary.main,
+          marginBottom: '25px', // Adds bottom margin to push down content
         }}
       >
         <Toolbar>
