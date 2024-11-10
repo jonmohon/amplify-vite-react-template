@@ -88,7 +88,20 @@ const Sidebar: React.FC = () => {
           },
         }}
       >
-        <Toolbar />
+        {/* Logo Container */}
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: '16px',
+            marginTop: '50px',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.2)',
+          }}
+        >
+          <img src="http://localhost:5173/logo.png" alt="Nexvato Logo" style={{ width: '70%', height: '45px' }} />
+        </Box>
+        
         <Divider />
         <List sx={{ padding: 0 }}>
           {menuItems.map((item, index) => (
