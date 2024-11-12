@@ -6,6 +6,7 @@ import Sidebar from './components/Sidebar';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import Dashboard from './pages/Dashboard';
 import Campaigns from './pages/Campaigns';
+import Leads from './pages/Leads';
 import Email from './pages/Email';
 import SMS from './pages/Sms';
 import Analytics from './pages/Analytics';
@@ -29,10 +30,11 @@ function App() {
     <ThemeProvider theme={theme}>
       <div style={{ display: 'flex' }}>
         <Sidebar />
-        <main style={{ flexGrow: 1, padding: '20px', backgroundColor: '#f4f6f8', minHeight: '100vh' }}>
+        <main style={{ flexGrow: 1, padding: '20px', paddingTop: '80px', backgroundColor: '#f4f6f8', minHeight: '100vh' }}>
           <Routes>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/campaigns" element={<Campaigns />} />
+            <Route path="/leads" element={<Leads />} />
             <Route path="/email" element={<Email />} />
             <Route path="/sms" element={<SMS />} />
             <Route path="/analytics" element={<Analytics />} />
@@ -46,4 +48,3 @@ function App() {
 }
 
 export default App;
-

@@ -16,7 +16,16 @@ import {
   Button,
   Box,
 } from '@mui/material';
-import { Dashboard, Campaign, Email, Sms, Analytics, Report, Settings } from '@mui/icons-material';
+import {
+  Dashboard,
+  Campaign,
+  Email as EmailIcon,
+  Sms as SmsIcon,
+  BarChart as AnalyticsIcon,
+  Assessment as ReportIcon,
+  Settings,
+  People as LeadsIcon,
+} from '@mui/icons-material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useTheme } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
@@ -37,10 +46,11 @@ const Sidebar: React.FC = () => {
   const menuItems = [
     { text: 'Dashboard', icon: <Dashboard />, link: '/dashboard' },
     { text: 'Campaigns', icon: <Campaign />, link: '/campaigns' },
-    { text: 'Email', icon: <Email />, link: '/email' },
-    { text: 'SMS', icon: <Sms />, link: '/sms' },
-    { text: 'Analytics', icon: <Analytics />, link: '/analytics' },
-    { text: 'Reporting', icon: <Report />, link: '/reporting' },
+    { text: 'Leads', icon: <LeadsIcon />, link: '/leads' },
+    { text: 'Email', icon: <EmailIcon />, link: '/email' },
+    { text: 'SMS', icon: <SmsIcon />, link: '/sms' },
+    { text: 'Analytics', icon: <AnalyticsIcon />, link: '/analytics' },
+    { text: 'Reporting', icon: <ReportIcon />, link: '/reporting' },
     { text: 'Settings', icon: <Settings />, link: '/settings' },
   ];
 
@@ -52,7 +62,7 @@ const Sidebar: React.FC = () => {
         sx={{
           zIndex: theme.zIndex.drawer + 1,
           backgroundColor: theme.palette.primary.main,
-          marginBottom: '25px', // Adds bottom margin to push down content
+          marginBottom: '25px',
         }}
       >
         <Toolbar>
@@ -88,7 +98,6 @@ const Sidebar: React.FC = () => {
           },
         }}
       >
-        {/* Logo Container */}
         <Box
           sx={{
             display: 'flex',
@@ -100,9 +109,8 @@ const Sidebar: React.FC = () => {
           }}
         >
           <img src="https://nexvato-images.s3.us-east-2.amazonaws.com/admin-images/logo.png" alt="Nexvato Logo" style={{ width: '70%', height: '40px' }} />
-
         </Box>
-        
+
         <Divider />
         <List sx={{ padding: 0 }}>
           {menuItems.map((item, index) => (

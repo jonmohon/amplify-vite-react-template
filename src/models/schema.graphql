@@ -1,0 +1,7 @@
+type Lead @model {
+  id: ID!
+  name: String!
+  email: String!
+  phone: String!
+  company: String!
+}
