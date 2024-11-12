@@ -1,7 +1,118 @@
+# Lead Management System GraphQL Schema
+
 type Lead @model {
-  id: ID!
+  lead_id: ID! @primaryKey
+  first_name: String!
+  last_name: String!
+  email: String! @unique
+  phone_number: String
+  company: String
+  job_title: String
+  industry: String
+
+  # Tracking Source & Campaign
+  lead_source: String
+  campaign: Campaign @connection(fields: ["campaign_id"])
+  campaign_id: ID
+
+  # Contact Information
+  address: Address
+  timezone: String
+  preferred_contact_method: String
+
+  # Status & Lifecycle
+  status: String
+  stage: String
+  last_contacted: AWSDateTime
+  next_followup_date: AWSDateTime
+
+  # Engagement & Activity
+  interactions: [Interaction] @connection(keyName: "byLead", fields: ["lead_id"])
+  email_opens: Int
+  link_clicks: Int
+  website_visits: Int
+
+  # Notes & Custom Fields
+  notes: [Note] @connection(keyName: "byLead", fields: ["lead_id"])
+  custom_fields: [CustomField] @connection(keyName: "byLead", fields: ["lead_id"])
+
+  # Lead Score
+  score: Int
+  score_last_updated: AWSDateTime
+
+  # Assignment & Ownership
+  owner: User @connection(fields: ["owner_id"])
+  owner_id: ID
+  team: String
+
+  # Conversion Data
+  conversion_date: AWSDateTime
+  deal_value: Float
+  conversion_source: String
+
+  # Tags & Labels
+  tags: [String]
+  priority: String
+}
+
+type Campaign @model {
+  campaign_id: ID! @primaryKey
   name: String!
+  description: String
+  start_date: AWSDateTime
+  end_date: AWSDateTime
+  leads: [Lead] @connection(keyName: "byCampaign", fields: ["campaign_id"])
+}
+
+type Interaction @model @key(name: "byLead", fields: ["lead_id"], queryField: "interactionsByLead") {
+  interaction_id: ID! @primaryKey
+  lead_id: ID!
+  type: String!
+  date: AWSDateTime!
+  outcome: String
+  notes: String
+}
+
+type Task @model @key(name: "byLead", fields: ["lead_id"], queryField: "tasksByLead") {
+  task_id: ID! @primaryKey
+  lead_id: ID!
+  description: String!
+  deadline: AWSDateTime
+  completed: Boolean!
+}
+
+type Note @model @key(name: "byLead", fields: ["lead_id"], queryField: "notesByLead") {
+  note_id: ID! @primaryKey
+  lead_id: ID!
+  content: String!
+  created_at: AWSDateTime!
+  created_by: String
+}
+
+type CustomField @model @key(name: "byLead", fields: ["lead_id"], queryField: "customFieldsByLead") {
+  field_id: ID! @primaryKey
+  lead_id: ID!
+  field_name: String!
+  field_value: String
+}
+
+type Address @embedded {
+  street: String
+  city: String
+  state: String
+  zip: String
+  country: String
+}
+
+type User @model {
+  user_id: ID! @primaryKey
+  username: String!
   email: String!
-  phone: String!
-  company: String!
+  leads: [Lead] @connection(keyName: "byOwner", fields: ["user_id"])
+}
+
+# Custom query example for filtering leads by status or stage
+type Query {
+  leadsByStatus(status: String!): [Lead] @index(name: "status-index", queryField: "leadsByStatus")
+  leadsByStage(stage: String!): [Lead] @index(name: "stage-index", queryField: "leadsByStage")
 }

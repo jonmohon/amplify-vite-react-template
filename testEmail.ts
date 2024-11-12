@@ -1,9 +1,9 @@
 import { sendEmail } from "./src/services/pinpointService";
 
 // Define the test email details
-const testEmailAddress = "jon@nexvato.com";
-const testSubject = "Test Email";
-const testBody = "This is a test email sent using AWS SES.";
+const testEmailAddress = "daltry@nexvato.com";
+const testSubject = "Win $1 Million by Answering this Question";
+const testBody = "People who annoy you?";
 
 // Call the function to test email sending with provided arguments
 sendEmail(testEmailAddress, testSubject, testBody).then(() => {
