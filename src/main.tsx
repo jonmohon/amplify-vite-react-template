@@ -8,6 +8,7 @@ import App from './App';
 import outputs from '../amplify_outputs.json';
 import './index.css';
 import '@aws-amplify/ui-react/styles.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 Amplify.configure(outputs);
 
