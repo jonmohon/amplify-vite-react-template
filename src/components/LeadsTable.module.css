@@ -1,0 +1,29 @@
+.table-wrapper {
+  position: relative;
+  height: calc(100vh - 120px);
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+}
+
+.table-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+.leads-table {
+  width: 100%;
+  table-layout: fixed;
+  min-width: 3000px;  /* Increased from 1500px to give columns more space */
+}
+
+.leads-table thead th {
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 1;
+}

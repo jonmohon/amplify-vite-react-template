@@ -1,33 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { Container } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Container, Row, Col, Card } from 'react-bootstrap';
 import HeaderToolbar from '../components/HeaderToolbar';
 import LeadFormModal from '../components/LeadFormModal';
 import LeadsTable from '../components/LeadsTable';
 import PaginationComponent from '../components/PaginationComponent';
-import { fetchLeads, createLead, deleteLead } from '../services/leadService';
+import useLeads from '../hooks/useLeads';
 import { LeadData } from '../types';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Leads: React.FC = () => {
-  const [leads, setLeads] = useState<LeadData[]>([]);
+  const { leads, addLead, removeLeads } = useLeads();
   const [formData, setFormData] = useState<LeadData>({ email: '' });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedLeads, setSelectedLeads] = useState<Set<string>>(new Set());
   const [currentPage, setCurrentPage] = useState(1);
   const leadsPerPage = 10;
-
-  useEffect(() => {
-    loadLeads();
-  }, []);
-
-  const loadLeads = async () => {
-    try {
-      const leadsData = await fetchLeads();
-      setLeads(leadsData as LeadData[]);
-    } catch (error) {
-      console.error('Error fetching leads:', error);
-    }
-  };
 
   const indexOfLastLead = currentPage * leadsPerPage;
   const indexOfFirstLead = indexOfLastLead - leadsPerPage;
@@ -40,13 +26,12 @@ const Leads: React.FC = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    let finalValue: string | number = value;
-    
-    // Handle number fields
+    let finalValue: string | number | null = value;
+
     if (name === 'score' || name === 'deal_value') {
-      finalValue = value === '' ? 0 : Number(value);
+      finalValue = value === '' ? null : Number(value);
     }
-    
+
     setFormData(prevData => ({
       ...prevData,
       [name]: finalValue,
@@ -56,8 +41,7 @@ const Leads: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await createLead(formData);
-      await loadLeads();
+      await addLead(formData);
       setIsModalOpen(false);
       setFormData({ email: '' });
     } catch (error) {
@@ -77,9 +61,7 @@ const Leads: React.FC = () => {
 
   const handleDeleteSelected = async () => {
     try {
-      const deletePromises = Array.from(selectedLeads).map(id => deleteLead(id));
-      await Promise.all(deletePromises);
-      await loadLeads();
+      await removeLeads(Array.from(selectedLeads));
       setSelectedLeads(new Set());
     } catch (error) {
       console.error('Error deleting leads:', error);
@@ -95,7 +77,12 @@ const Leads: React.FC = () => {
   };
 
   return (
-    <Container className="mt-5" fluid>
+      <Container className="mt-5" fluid style={{ 
+        height: '100vh', 
+        display: 'flex', 
+        flexDirection: 'column',
+        padding: '0 20px'  // Add padding to prevent bleeding
+      }}>
       {/* Header Toolbar */}
       <HeaderToolbar 
         onAdd={() => setIsModalOpen(true)} 
@@ -112,31 +99,38 @@ const Leads: React.FC = () => {
         onSubmit={handleSubmit} 
       />
 
-      {/* Pagination and Entries Info */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '1rem', borderBottom: '1px solid #dee2e6', background: 'white' }}>
-        <div>
-          Showing {indexOfFirstLead + 1} to {Math.min(indexOfLastLead, leads.length)} of {leads.length} entries
-        </div>
+      <Card className="shadow-sm" style={{ flex: 1 }}>
+        {/* Pagination and Entries Info */}
+        <Row className="p-3 align-items-center g-2">
+      <Col xs={12} lg={6} className="d-flex align-items-center">
         <PaginationComponent 
           currentPage={currentPage} 
           totalPages={totalPages} 
           onPageChange={handlePageChange} 
         />
-      </div>
+      </Col>
+      <Col xs={12} lg={6} className="text-lg-end">
+        <span className="text-muted">
+          Showing {indexOfFirstLead + 1} to {Math.min(indexOfLastLead, leads.length)} of {leads.length} entries
+        </span>
+      </Col>
+    </Row>
 
-      {/* Leads Table */}
-      <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 200px)', border: '1px solid #dee2e6', borderRadius: '4px' }}>
-        <div style={{ flex: 1, overflow: 'hidden' }}>
-          <div style={{ height: '100%', overflowY: 'auto' }}>
-            <LeadsTable 
-              leads={currentLeads} 
-              selectedLeads={selectedLeads} 
-              onSelectAll={handleSelectAll} 
-              onSelectOne={handleCheckboxChange} 
-            />
-          </div>
+        {/* Leads Table */}
+        <div className="table-responsive" style={{ 
+          padding: '0 20px', 
+          overflowX: 'auto',
+          maxWidth: '100%'
+        }}>
+          <LeadsTable 
+            leads={currentLeads} 
+            selectedLeads={selectedLeads} 
+            onSelectAll={handleSelectAll} 
+            onSelectOne={handleCheckboxChange} 
+          />
         </div>
-      </div>
+
+      </Card>
     </Container>
   );
 };

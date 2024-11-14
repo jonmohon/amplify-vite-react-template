@@ -3,8 +3,9 @@ import { Button } from 'react-bootstrap';
 
 interface HeaderToolbarProps {
   onAdd: () => void;
-  onDelete: () => void;
+  onDelete: () => Promise<void>;
   selectedCount: number;
+  addButtonText?: string; // Add this property to the props interface
 }
 
 const HeaderToolbar: React.FC<HeaderToolbarProps> = ({ onAdd, onDelete, selectedCount }) => {

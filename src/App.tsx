@@ -5,7 +5,7 @@ import theme from './theme/theme';
 import Sidebar from './components/Sidebar';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import Dashboard from './pages/Dashboard';
-import Campaigns from './pages/Campaigns';
+import Campaigns  from './pages/Campaigns';
 import Leads from './pages/Leads';
 import Email from './pages/Email';
 import SMS from './pages/Sms';

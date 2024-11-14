@@ -10,6 +10,11 @@
       "StackName": "amplify-nexvatoadmin-dev-4386b",
       "StackId": "arn:aws:cloudformation:us-west-1:308561043671:stack/amplify-nexvatoadmin-dev-4386b/a5f146d0-a09c-11ef-871d-021ed9568929",
       "AmplifyAppId": "d33iceex09eppc"
+    },
+    "categories": {
+      "auth": {
+        "nexvatoadminf7be5032": {}
+      }
     }
   }
 }

@@ -78,8 +78,6 @@ const schema = a.schema({
     lead_id: a.id(),
     lead: a.belongsTo("Lead", "lead_id"),
     content: a.string(),
-    created_at: a.datetime(),
-    created_by: a.string(),
   }).authorization(allow => [allow.owner()]),
 
   CustomField: a.model({

@@ -2,6 +2,7 @@ import React from 'react';
 import { Table, Form } from 'react-bootstrap';
 import LeadRow from './LeadRow';
 import { LeadData } from '../types';
+import styles from './LeadsTable.module.css';
 
 interface LeadsTableProps {
   leads: LeadData[];
@@ -12,47 +13,57 @@ interface LeadsTableProps {
 
 const LeadsTable: React.FC<LeadsTableProps> = ({ leads, selectedLeads, onSelectAll, onSelectOne }) => {
   return (
-    <Table striped bordered hover style={{ margin: 0 }}>
-      <thead style={{ position: 'sticky', top: 0, background: 'white', zIndex: 1 }}>
-        <tr>
-          <th style={{ width: '50px', background: 'white' }}>
-            <Form.Check
-              type="checkbox"
-              onChange={(e) => onSelectAll(e.target.checked)}
-              checked={selectedLeads.size === leads.length && leads.length > 0}
-            />
-          </th>
-          <th>Email</th>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Phone Number</th>
-          <th>Company</th>
-          <th>Job Title</th>
-          <th>Industry</th>
-          <th>Lead Source</th>
-          <th>Campaign ID</th>
-          <th>Timezone</th>
-          <th>Status</th>
-          <th>Stage</th>
-          <th>Team</th>
-          <th>Priority</th>
-          <th>Score</th>
-          <th>Deal Value</th>
-          <th>Preferred Contact Method</th>
-          <th>Conversion Source</th>
-        </tr>
-      </thead>
-      <tbody>
-        {leads.map((lead) => (
-          <LeadRow 
-            key={lead.id} 
-            lead={lead} 
-            isSelected={selectedLeads.has(lead.id!)} 
-            onSelect={() => onSelectOne(lead.id!)} 
-          />
-        ))}
-      </tbody>
-    </Table>
+    <div className={styles['table-wrapper']}>
+      <div className={styles['table-container']}>
+        <Table 
+          striped 
+          bordered 
+          hover 
+          responsive 
+          className={styles['leads-table']}
+        >
+          <thead>
+            <tr>
+              <th style={{ width: '50px', minWidth: '50px' }}>
+                <Form.Check
+                  type="checkbox"
+                  onChange={(e) => onSelectAll(e.target.checked)}
+                  checked={selectedLeads.size === leads.length && leads.length > 0}
+                />
+              </th>
+              <th style={{ minWidth: '200px' }}>Email</th>
+              <th style={{ minWidth: '150px' }}>First Name</th>
+              <th style={{ minWidth: '150px' }}>Last Name</th>
+              <th style={{ minWidth: '150px' }}>Phone Number</th>
+              <th style={{ minWidth: '200px' }}>Company</th>
+              <th style={{ minWidth: '150px' }}>Job Title</th>
+              <th style={{ minWidth: '150px' }}>Industry</th>
+              <th style={{ minWidth: '150px' }}>Lead Source</th>
+              <th style={{ minWidth: '150px' }}>Campaign ID</th>
+              <th style={{ minWidth: '150px' }}>Timezone</th>
+              <th style={{ minWidth: '150px' }}>Status</th>
+              <th style={{ minWidth: '150px' }}>Stage</th>
+              <th style={{ minWidth: '150px' }}>Team</th>
+              <th style={{ minWidth: '150px' }}>Priority</th>
+              <th style={{ minWidth: '100px' }}>Score</th>
+              <th style={{ minWidth: '150px' }}>Deal Value</th>
+              <th style={{ minWidth: '200px' }}>Preferred Contact Method</th>
+              <th style={{ minWidth: '200px' }}>Conversion Source</th>
+            </tr>
+          </thead>
+          <tbody>
+            {leads.map((lead) => (
+              <LeadRow 
+                key={lead.id} 
+                lead={lead} 
+                isSelected={selectedLeads.has(lead.id!)} 
+                onSelect={() => onSelectOne(lead.id!)} 
+              />
+            ))}
+          </tbody>
+        </Table>
+      </div>
+    </div>
   );
 };
 

@@ -1,123 +1,155 @@
-// src/pages/Campaigns.tsx
-import React from 'react';
-import {
-  Box,
-  Typography,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Button,
-} from '@mui/material';
+import React, { useState } from 'react';
+import { Container, Row, Col, Card } from 'react-bootstrap';
+import HeaderToolbar from '../components/HeaderToolbar';
+import CampaignFormModal from '../components/CampaignFormModal';
+import CampaignsTable from '../components/CampaignsTable';
+import PaginationComponent from '../components/PaginationComponent';
+import { CampaignData } from '../types';
 
-const campaignsData = [
-  {
-    id: 1,
-    name: 'Summer Sale Email Blast',
-    type: 'Email',
-    status: 'Active',
-    sent: 5000,
-    opened: 3000,
-    clicked: 1200,
-    created: '2024-07-01',
-    scheduled: '2024-07-05',
-  },
-  {
-    id: 2,
-    name: 'Back to School SMS Alert',
-    type: 'SMS',
-    status: 'Scheduled',
-    sent: 2000,
-    responses: 500,
-    created: '2024-08-01',
-    scheduled: '2024-08-10',
-  },
-  {
-    id: 3,
-    name: 'New Product Launch Email',
-    type: 'Email',
-    status: 'Draft',
-    sent: 0,
-    opened: 0,
-    clicked: 0,
-    created: '2024-09-01',
-    scheduled: '2024-09-15',
-  },
-  {
-    id: 4,
-    name: 'Holiday Promo SMS',
-    type: 'SMS',
-    status: 'Active',
-    sent: 3500,
-    responses: 1000,
-    created: '2024-11-20',
-    scheduled: '2024-11-25',
-  },
-  {
-    id: 5,
-    name: 'Flash Sale Email Campaign',
-    type: 'Email',
-    status: 'Completed',
-    sent: 4500,
-    opened: 2500,
-    clicked: 900,
-    created: '2024-10-15',
-    scheduled: '2024-10-20',
-  },
-];
+export interface CampaignCreate {
+  id?: string;
+  name: string;
+  description?: string;
+  created_at: Date;
+  // Add other relevant properties
+}
 
 const Campaigns: React.FC = () => {
-  return (
-    <Box sx={{ pt: 10, px: 3, backgroundColor: '#f4f6f8', minHeight: '100vh' }}>
-      <Typography variant="h4" gutterBottom sx={{ mb: 4, textAlign: 'center' }}>
-        Campaigns
-      </Typography>
-      <TableContainer component={Paper} sx={{ maxWidth: 1000, margin: '0 auto', boxShadow: 3 }}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Campaign Name</TableCell>
-              <TableCell>Type</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Sent</TableCell>
-              <TableCell>Opened / Responses</TableCell>
-              <TableCell>Clicked (Email Only)</TableCell>
-              <TableCell>Created</TableCell>
-              <TableCell>Scheduled</TableCell>
-              <TableCell>Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {campaignsData.map((campaign) => (
-              <TableRow key={campaign.id}>
-                <TableCell>{campaign.name}</TableCell>
-                <TableCell>{campaign.type}</TableCell>
-                <TableCell>{campaign.status}</TableCell>
-                <TableCell>{campaign.sent}</TableCell>
-                <TableCell>
-                  {campaign.type === 'Email' ? campaign.opened : campaign.responses}
-                </TableCell>
-                <TableCell>{campaign.type === 'Email' ? campaign.clicked : '-'}</TableCell>
-                <TableCell>{campaign.created}</TableCell>
-                <TableCell>{campaign.scheduled}</TableCell>
-                <TableCell>
-                  <Button variant="contained" color="primary" size="small" sx={{ mr: 1 }}>
-                    Edit
-                  </Button>
-                  <Button variant="outlined" color="secondary" size="small">
-                    View
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Box>
-  );
-};
+  const [campaigns, setCampaigns] = useState<CampaignData[]>([]);
+  const [formData, setFormData] = useState<CampaignData>({ 
+    name: '',
+    leads_count: 0,
+    conversion_rate: 0,
+    created_at: '',
+    status: 'active',
+    id: '',
+    subject: '',
+    textContent: '',
+    htmlContent: '',
+    description: ''
+  });
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedCampaigns, setSelectedCampaigns] = useState<Set<string>>(new Set());
+  const [currentPage, setCurrentPage] = useState(1);
+  const campaignsPerPage = 10;
 
-export default Campaigns;
+  const indexOfLastCampaign = currentPage * campaignsPerPage;
+  const indexOfFirstCampaign = indexOfLastCampaign - campaignsPerPage;
+  const currentCampaigns = campaigns.slice(indexOfFirstCampaign, indexOfLastCampaign);
+  const totalPages = Math.ceil(campaigns.length / campaignsPerPage);
+  
+
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prevData => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const newCampaign: CampaignData = {
+      ...formData,
+      id: Date.now().toString(),
+      created_at: ''
+    };
+    
+    setCampaigns(prevCampaigns => [...prevCampaigns, newCampaign]);
+    setIsModalOpen(false);
+    setFormData({ 
+      name: '',
+      leads_count: 0,
+      conversion_rate: 0,
+      created_at: '',
+      status: 'active',
+      id: '',
+      subject: '',
+      textContent: '',
+      htmlContent: '',
+      description: ''
+    });
+  };
+
+  const handleCheckboxChange = (campaignId: string) => {    const newSelected = new Set(selectedCampaigns);
+    if (newSelected.has(campaignId)) {
+      newSelected.delete(campaignId);
+    } else {
+      newSelected.add(campaignId);
+    }
+    setSelectedCampaigns(newSelected);
+  };
+
+  const handleSelectAll = (checked: boolean) => {
+    if (checked) {
+      setSelectedCampaigns(new Set(currentCampaigns.map(campaign => campaign.id).filter((id): id is string => id !== undefined)));
+    } else {
+      setSelectedCampaigns(new Set());
+    }
+  };
+
+  const handleDeleteSelected = async () => {
+    setCampaigns(prevCampaigns => 
+      prevCampaigns.filter(campaign => campaign.id !== undefined && !selectedCampaigns.has(campaign.id))
+    );
+    setSelectedCampaigns(new Set());
+  };
+
+  return (
+    <Container className="mt-5" fluid style={{ 
+      height: '100vh', 
+      display: 'flex', 
+      flexDirection: 'column',
+      padding: '0 20px'
+    }}>
+      <HeaderToolbar 
+        onAdd={() => setIsModalOpen(true)} 
+        onDelete={handleDeleteSelected} 
+        selectedCount={selectedCampaigns.size} 
+      />
+
+      <CampaignFormModal 
+        show={isModalOpen}
+        onHide={() => setIsModalOpen(false)}
+        formData={formData}
+        onChange={handleChange}
+        onSubmit={handleSubmit} onEditorChange={function (): void {
+          throw new Error('Function not implemented.');
+        } }      />
+
+      <Card className="shadow-sm" style={{ flex: 1 }}>
+        <Row className="p-3 align-items-center g-2">
+          <Col xs={12} lg={6} className="d-flex align-items-center">
+            <PaginationComponent 
+              currentPage={currentPage} 
+              totalPages={totalPages} 
+              onPageChange={handlePageChange} 
+            />
+          </Col>
+          <Col xs={12} lg={6} className="text-lg-end">
+            <span className="text-muted">
+              Showing {indexOfFirstCampaign + 1} to {Math.min(indexOfLastCampaign, campaigns.length)} of {campaigns.length} entries
+            </span>
+          </Col>
+        </Row>
+
+        <div className="table-responsive" style={{ 
+          padding: '0 20px', 
+          overflowX: 'auto',
+          maxWidth: '100%'
+        }}>
+          <CampaignsTable 
+            campaigns={currentCampaigns} 
+            selectedCampaigns={selectedCampaigns} 
+            onSelectAll={handleSelectAll} 
+            onSelectOne={handleCheckboxChange} 
+          />
+        </div>
+      </Card>
+    </Container>
+  );
+};export default Campaigns;
