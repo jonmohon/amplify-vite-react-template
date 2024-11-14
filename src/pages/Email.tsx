@@ -5,7 +5,7 @@ const Email: React.FC = () => {
   return (
     <div>
       <h1>Email Page</h1>
-      <p>This is the Email page component.</p>
+      <p>This is the Email page component</p>
     </div>
   );
 };
