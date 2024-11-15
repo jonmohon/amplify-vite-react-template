@@ -44,7 +44,7 @@ const LeadFormModal: React.FC<LeadFormModalProps> = ({ show, onHide, formData, o
                 <Form.Label>First Name</Form.Label>
                 <Form.Control
                   type="text"
-                  name="first_name"
+                  name="firstName"
                   placeholder="Enter first name"
                   value={formData.firstName || ''}
                   onChange={onChange}
@@ -54,7 +54,7 @@ const LeadFormModal: React.FC<LeadFormModalProps> = ({ show, onHide, formData, o
                 <Form.Label>Last Name</Form.Label>
                 <Form.Control
                   type="text"
-                  name="last_name"
+                  name="lastName"
                   placeholder="Enter last name"
                   value={formData.lastName ?? ''}
                   onChange={onChange}
@@ -64,7 +64,7 @@ const LeadFormModal: React.FC<LeadFormModalProps> = ({ show, onHide, formData, o
                 <Form.Label>Phone Number</Form.Label>
                 <Form.Control
                   type="text"
-                  name="phone_number"
+                  name="phoneNumber"
                   placeholder="Enter phone number"
                   value={formData.phoneNumber ?? ''}
                   onChange={onChange}
@@ -84,7 +84,7 @@ const LeadFormModal: React.FC<LeadFormModalProps> = ({ show, onHide, formData, o
                 <Form.Label>Job Title</Form.Label>
                 <Form.Control
                   type="text"
-                  name="job_title"
+                  name="jobTitle"
                   placeholder="Enter job title"
                   value={formData.jobTitle ?? ''}
                   onChange={onChange}
@@ -108,7 +108,7 @@ const LeadFormModal: React.FC<LeadFormModalProps> = ({ show, onHide, formData, o
                 <Form.Label>Lead Source</Form.Label>
                 <Form.Control
                   type="text"
-                  name="lead_source"
+                  name="leadSource"
                   placeholder="Enter lead source"
                   value={formData.leadSource ?? ''}
                   onChange={onChange}
@@ -118,7 +118,7 @@ const LeadFormModal: React.FC<LeadFormModalProps> = ({ show, onHide, formData, o
                 <Form.Label>Campaign ID</Form.Label>
                 <Form.Control
                   type="text"
-                  name="campaign_id"
+                  name="campaignId"
                   placeholder="Enter campaign ID"
                   value={formData.campaignId ?? ''}
                   onChange={onChange}
@@ -192,7 +192,7 @@ const LeadFormModal: React.FC<LeadFormModalProps> = ({ show, onHide, formData, o
                 <Form.Label>Deal Value</Form.Label>
                 <Form.Control
                   type="number"
-                  name="deal_value"
+                  name="dealValue"
                   placeholder="Enter deal value"
                   value={formData.dealValue ?? ''}
                   onChange={onChange}
@@ -202,7 +202,7 @@ const LeadFormModal: React.FC<LeadFormModalProps> = ({ show, onHide, formData, o
                 <Form.Label>Preferred Contact Method</Form.Label>
                 <Form.Control
                   type="text"
-                  name="preferred_contact_method"
+                  name="preferredContactMethod"
                   placeholder="Enter preferred contact method"
                   value={formData.preferredContactMethod ?? ''}
                   onChange={onChange}
@@ -212,7 +212,7 @@ const LeadFormModal: React.FC<LeadFormModalProps> = ({ show, onHide, formData, o
                 <Form.Label>Conversion Source</Form.Label>
                 <Form.Control
                   type="text"
-                  name="conversion_source"
+                  name="conversionSource"
                   placeholder="Enter conversion source"
                   value={formData.conversionSource ?? ''}
                   onChange={onChange}
