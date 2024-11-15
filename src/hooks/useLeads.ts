@@ -1,4 +1,3 @@
-// src/hooks/useLeads.ts
 import { useState, useEffect } from 'react';
 import { fetchLeads, createLead, deleteLead } from '../services/leadService';
 import { LeadData } from '../types';
@@ -12,7 +11,17 @@ const useLeads = () => {
     setLoading(true);
     try {
       const leadsData = await fetchLeads();
-      setLeads(leadsData);
+      // Ensure the data matches LeadData type
+      const processedLeads = leadsData.map(lead => ({
+        ...lead,
+        status: lead.status && ['new', 'contacted', 'qualified', 'unqualified'].includes(lead.status as string) 
+          ? (lead.status as "new" | "contacted" | "qualified" | "unqualified")
+          : "new",
+        priority: lead.priority && ['low', 'medium', 'high'].includes(lead.priority as string)
+          ? (lead.priority as "low" | "medium" | "high")
+          : undefined
+      }));
+      setLeads(processedLeads as LeadData[]);
     } catch (err) {
       setError('Error fetching leads');
       console.error(err);
@@ -20,6 +29,7 @@ const useLeads = () => {
       setLoading(false);
     }
   };
+
   const addLead = async (lead: LeadData) => {
     setLoading(true);
     try {
