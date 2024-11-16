@@ -1,3 +1,5 @@
+// LeadsTable.tsx - Updated to include renderActions prop
+
 import React from 'react';
 import { Table, Form } from 'react-bootstrap';
 import LeadRow from './LeadRow';
@@ -9,9 +11,10 @@ interface LeadsTableProps {
   selectedLeads: Set<string>;
   onSelectAll: (checked: boolean) => void;
   onSelectOne: (id: string) => void;
+  renderActions?: (lead: LeadData) => JSX.Element;
 }
 
-const LeadsTable: React.FC<LeadsTableProps> = ({ leads, selectedLeads, onSelectAll, onSelectOne }) => {
+const LeadsTable: React.FC<LeadsTableProps> = ({ leads, selectedLeads, onSelectAll, onSelectOne, renderActions }) => {
   return (
     <div className={styles['table-wrapper']}>
       <div className={styles['table-container']}>
@@ -49,6 +52,7 @@ const LeadsTable: React.FC<LeadsTableProps> = ({ leads, selectedLeads, onSelectA
               <th style={{ minWidth: '150px' }}>Deal Value</th>
               <th style={{ minWidth: '200px' }}>Preferred Contact Method</th>
               <th style={{ minWidth: '200px' }}>Conversion Source</th>
+              <th style={{ minWidth: '150px' }}>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -57,8 +61,12 @@ const LeadsTable: React.FC<LeadsTableProps> = ({ leads, selectedLeads, onSelectA
                 key={lead.id} 
                 lead={lead} 
                 isSelected={selectedLeads.has(lead.id!)} 
-                onSelect={() => onSelectOne(lead.id!)} 
-              />
+                onSelect={() => onSelectOne(lead.id!)}
+              >
+                {renderActions && (
+                  <td>{renderActions(lead)}</td>
+                )}
+              </LeadRow>
             ))}
           </tbody>
         </Table>

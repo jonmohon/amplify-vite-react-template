@@ -1,3 +1,5 @@
+// LeadFormModal.tsx - Updated to handle both new lead creation and editing
+
 import React from 'react';
 import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
 import { LeadData } from '../types';
@@ -20,7 +22,7 @@ const LeadFormModal: React.FC<LeadFormModalProps> = ({ show, onHide, formData, o
       centered
     >
       <Modal.Header closeButton>
-        <Modal.Title>Enter Lead Information</Modal.Title>
+        <Modal.Title>{formData.id ? 'Edit Lead' : 'Enter Lead Information'}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={onSubmit}>
@@ -221,7 +223,7 @@ const LeadFormModal: React.FC<LeadFormModalProps> = ({ show, onHide, formData, o
             </Col>
           </Row>
           <Button variant="primary" type="submit">
-            Save Lead
+            {formData.id ? 'Update Lead' : 'Save Lead'}
           </Button>
         </Form>
       </Modal.Body>

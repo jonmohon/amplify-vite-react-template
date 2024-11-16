@@ -1,3 +1,8 @@
+/**
+ * The main React component for the Nexvato Admin application.
+ * It sets up the application's routing, theme, and main layout with a sidebar and main content area.
+ * The component also handles the initial login redirect to the /dashboard route.
+ */
 // src/App.tsx
 import { useEffect, useState } from 'react';
 import { ThemeProvider } from '@mui/material/styles';

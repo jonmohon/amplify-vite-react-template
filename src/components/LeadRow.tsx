@@ -1,4 +1,4 @@
-// src/components/LeadRow.tsx
+// src/components/LeadRow.tsx - Updated to include renderActions as a child
 import React from 'react';
 import { Form } from 'react-bootstrap';
 import { LeadData } from '../types';
@@ -8,9 +8,10 @@ interface LeadRowProps {
   lead: LeadData;
   isSelected: boolean;
   onSelect: () => void;
+  children?: React.ReactNode; // Allow actions to be passed as children
 }
 
-const LeadRow: React.FC<LeadRowProps> = ({ lead, isSelected, onSelect }) => {
+const LeadRow: React.FC<LeadRowProps> = ({ lead, isSelected, onSelect, children }) => {
   return (
     <tr>
       <td>
@@ -38,6 +39,7 @@ const LeadRow: React.FC<LeadRowProps> = ({ lead, isSelected, onSelect }) => {
       <td className="lead-cell">{lead.dealValue !== null && lead.dealValue !== undefined ? lead.dealValue : '-'}</td>
       <td className="lead-cell">{lead.preferredContactMethod || '-'}</td>
       <td className="lead-cell">{lead.conversionSource || '-'}</td>
+      <td>{children}</td>
     </tr>
   );
 };

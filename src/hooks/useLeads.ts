@@ -1,66 +1,100 @@
-import { useState, useEffect } from 'react';
-import { fetchLeads, createLead, deleteLead } from '../services/leadService';
-import { LeadData } from '../types';
+import { useState, useCallback } from 'react';
+import { 
+  LeadData, 
+  LeadCreate, 
+  LeadUpdate, 
+  PaginationParams, 
+  ListResponse 
+} from '../types';
 
-const useLeads = () => {
+export const useLeads = () => {
   const [leads, setLeads] = useState<LeadData[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  const loadLeads = async () => {
+  const fetchLeads = useCallback(async (params?: PaginationParams) => {
     setLoading(true);
+    setError(null);
     try {
-      const leadsData = await fetchLeads();
-      // Ensure the data matches LeadData type
-      const processedLeads = leadsData.map(lead => ({
-        ...lead,
-        status: lead.status && ['new', 'contacted', 'qualified', 'unqualified'].includes(lead.status as string) 
-          ? (lead.status as "new" | "contacted" | "qualified" | "unqualified")
-          : "new",
-        priority: lead.priority && ['low', 'medium', 'high'].includes(lead.priority as string)
-          ? (lead.priority as "low" | "medium" | "high")
-          : undefined
-      }));
-      setLeads(processedLeads as LeadData[]);
+      // Implement actual API call logic
+      const response: ListResponse<LeadData> = {
+        data: [],
+        total: 0,
+        page: params?.page || 1,
+        pageSize: params?.pageSize || 10
+      };
+      setLeads(response.data);
+      return response;
     } catch (err) {
-      setError('Error fetching leads');
-      console.error(err);
+      setError(err instanceof Error ? err.message : 'Failed to fetch leads');
+      return null;
     } finally {
       setLoading(false);
     }
-  };
-
-  const addLead = async (lead: LeadData) => {
-    setLoading(true);
-    try {
-      await createLead(lead);
-      await loadLeads();
-    } catch (err) {
-      setError('Error creating lead');
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const removeLeads = async (ids: string[]) => {
-    setLoading(true);
-    try {
-      await Promise.all(ids.map(id => deleteLead(id)));
-      await loadLeads();
-    } catch (err) {
-      setError('Error deleting leads');
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    loadLeads();
   }, []);
 
-  return { leads, loading, error, addLead, removeLeads };
-};
+  const createLead = useCallback(async (leadData: LeadCreate) => {
+    setLoading(true);
+    setError(null);
+    try {
+      // Implement actual API call logic
+      const newLead: LeadData = {
+        ...leadData,
+        id: crypto.randomUUID(), // Generate a temporary ID
+        status: 'new',
+        priority: 'medium'
+      };
+      setLeads(prev => [...prev, newLead]);
+      return newLead;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to create lead');
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
-export default useLeads;
+  const updateLead = useCallback(async (id: string, updates: LeadUpdate) => {
+    setLoading(true);
+    setError(null);
+    try {
+      // Implement actual API call logic
+      setLeads(prev => 
+        prev.map(lead => 
+          lead.id === id ? { ...lead, ...updates } : lead
+        )
+      );
+      return true;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to update lead');
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const deleteLead = useCallback(async (id: string) => {
+    setLoading(true);
+    setError(null);
+    try {
+      // Implement actual API call logic
+      setLeads(prev => prev.filter(lead => lead.id !== id));
+      return true;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete lead');
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  return {
+    leads,
+    loading,
+    error,
+    fetchLeads,
+    createLead,
+    updateLead,
+    deleteLead
+  };
+};
