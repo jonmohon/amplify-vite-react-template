@@ -108,7 +108,7 @@ const SMS: React.FC = () => {
       <Typography variant="h4" gutterBottom sx={{ mb: 4, textAlign: 'center' }}>
         SMS Campaigns
       </Typography>
-      <Box display="flex" justifyContent="flex-end" sx={{ mb: 2 }}>
+      <Box display="flex" justifyContent="flex-start" sx={{ mb: 2 }}>
         <Button
           variant="contained"
           color="primary"
@@ -126,7 +126,7 @@ const SMS: React.FC = () => {
           Send Test Message
         </Button>
       </Box>
-      <TableContainer component={Paper} sx={{ maxWidth: 1000, margin: '0 auto', boxShadow: 3 }}>
+      <TableContainer component={Paper} sx={{ maxWidth: '100%', margin: '0 auto', boxShadow: 3 }}>
         <Table>
           <TableHead>
             <TableRow>
