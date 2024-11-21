@@ -10,7 +10,7 @@ interface LeadsTableProps {
   leads: LeadData[];
   selectedLeads: Set<string>;
   onSelectAll: (checked: boolean) => void;
-  onSelectOne: (id: string) => void;
+  onSelectOne: (leadId: string) => void;
   renderActions?: (lead: LeadData) => JSX.Element;
 }
 
@@ -58,10 +58,10 @@ const LeadsTable: React.FC<LeadsTableProps> = ({ leads, selectedLeads, onSelectA
           <tbody>
             {leads.map((lead) => (
               <LeadRow 
-                key={lead.id} 
+                key={lead.leadId} 
                 lead={lead} 
-                isSelected={selectedLeads.has(lead.id!)} 
-                onSelect={() => onSelectOne(lead.id!)}
+                isSelected={selectedLeads.has(lead.leadId!)} 
+                onSelect={() => onSelectOne(lead.leadId!)}
               >
                 {renderActions && (
                   <td>{renderActions(lead)}</td>

@@ -22,7 +22,7 @@ const LeadFormModal: React.FC<LeadFormModalProps> = ({ show, onHide, formData, o
       centered
     >
       <Modal.Header closeButton>
-        <Modal.Title>{formData.id ? 'Edit Lead' : 'Enter Lead Information'}</Modal.Title>
+        <Modal.Title>{formData.leadId ? 'Edit Lead' : 'Enter Lead Information'}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={onSubmit}>
@@ -223,7 +223,7 @@ const LeadFormModal: React.FC<LeadFormModalProps> = ({ show, onHide, formData, o
             </Col>
           </Row>
           <Button variant="primary" type="submit">
-            {formData.id ? 'Update Lead' : 'Save Lead'}
+            {formData.leadId ? 'Update Lead' : 'Save Lead'}
           </Button>
         </Form>
       </Modal.Body>

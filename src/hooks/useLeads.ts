@@ -1,102 +1,54 @@
 import { useState, useCallback } from 'react';
-import { 
-  LeadData, 
-  LeadCreate, 
-  LeadUpdate, 
-  PaginationParams, 
-  ListResponse 
-} from '../types';
+import { generateClient } from 'aws-amplify/data';
+import { Amplify } from 'aws-amplify';
+import outputs from '../../amplify_outputs.json';
+import type { Schema } from '../../amplify/data/resource';
 
+// Configure Amplify
+Amplify.configure(outputs);
 
+// Generate client with proper typing
+const client = generateClient<Schema>({
+  authMode: 'userPool'
+});
 
 export const useLeads = () => {
-  const [leads, setLeads] = useState<LeadData[]>([]);
+  const [leads, setLeads] = useState<Schema['Lead']['type'][]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchLeads = useCallback(async (params?: PaginationParams) => {
+  const fetchLeads = useCallback(async () => {
     setLoading(true);
     setError(null);
+
     try {
-      // Implement actual API call logic
-      const response: ListResponse<LeadData> = {
-        data: [],
-        total: 0,
-        page: params?.page || 1,
-        pageSize: params?.pageSize || 10
-      };
-      setLeads(response.data);
-      return response;
+      const { data, errors } = await client.models.Lead.list({
+        // Remove pagination parameters to fetch all leads
+      });
+
+      if (errors) {
+        throw new Error(errors.map(e => e.message).join(', '));
+      }
+
+      setLeads(data);
+      return data; // Return the fetched leads
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch leads');
+      const errorMessage = err instanceof Error 
+        ? err.message 
+        : 'Failed to fetch leads';
+      
+      setError(errorMessage);
+      console.error('Leads fetch error:', errorMessage);
       return null;
     } finally {
       setLoading(false);
     }
   }, []);
 
-  const createLead = useCallback(async (leadData: LeadCreate) => {
-    setLoading(true);
-    setError(null);
-    try {
-      // Implement actual API call logic
-      const newLead: LeadData = {
-        ...leadData,
-        id: crypto.randomUUID(), // Generate a temporary ID
-        status: 'new',
-        priority: 'medium'
-      };
-      setLeads(prev => [...prev, newLead]);
-      return newLead;
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to create lead');
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  const updateLead = useCallback(async (id: string, updates: LeadUpdate) => {
-    setLoading(true);
-    setError(null);
-    try {
-      // Implement actual API call logic
-      setLeads(prev => 
-        prev.map(lead => 
-          lead.id === id ? { ...lead, ...updates } : lead
-        )
-      );
-      return true;
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to update lead');
-      return false;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  const deleteLead = useCallback(async (id: string) => {
-    setLoading(true);
-    setError(null);
-    try {
-      // Implement actual API call logic
-      setLeads(prev => prev.filter(lead => lead.id !== id));
-      return true;
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to delete lead');
-      return false;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  return {
-    leads,
-    loading,
-    error,
-    fetchLeads,
-    createLead,
-    updateLead,
-    deleteLead
+  return { 
+    leads, 
+    loading, 
+    error, 
+    fetchLeads 
   };
 };

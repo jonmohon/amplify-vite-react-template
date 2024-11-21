@@ -1,10 +1,10 @@
 // Comprehensive type definitions for Nexvato Admin
 
 export interface LeadData {
-  id?: string;
+  leadId?: string;
   firstName?: string | null;
   lastName?: string | null;
-  email: string | null;
+  email: string | null | undefined;
   phoneNumber?: string | null;
   company?: string | null;
   jobTitle?: string | null;
@@ -52,6 +52,7 @@ export interface PaginationParams {
   sortBy?: string;
   sortOrder?: 'asc' | 'desc';
 }
+
 
 // Response type for list operations
 export interface ListResponse<T> {
