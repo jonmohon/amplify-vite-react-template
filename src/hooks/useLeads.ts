@@ -1,54 +1,33 @@
 import { useState, useCallback } from 'react';
-import { generateClient } from 'aws-amplify/data';
-import { Amplify } from 'aws-amplify';
-import outputs from '../../amplify_outputs.json';
-import type { Schema } from '../../amplify/data/resource';
+import { generateClient } from 'aws-amplify/api';
+import { type Schema } from '../resource';
+import * as queries from '../graphql/queries';
 
-// Configure Amplify
-Amplify.configure(outputs);
+const client = generateClient<Schema>();
 
-// Generate client with proper typing
-const client = generateClient<Schema>({
-  authMode: 'userPool'
-});
-
-export const useLeads = () => {
-  const [leads, setLeads] = useState<Schema['Lead']['type'][]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+export function useLeads() {
+  const [leads, setLeads] = useState<Schema['Lead'][]>([]);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const fetchLeads = useCallback(async () => {
     setLoading(true);
-    setError(null);
-
     try {
-      const { data, errors } = await client.models.Lead.list({
-        // Remove pagination parameters to fetch all leads
+      const response = await client.graphql({
+        query: queries.listLeads,
+        authMode: 'userPool'
       });
-
-      if (errors) {
-        throw new Error(errors.map(e => e.message).join(', '));
-      }
-
-      setLeads(data);
-      return data; // Return the fetched leads
-    } catch (err) {
-      const errorMessage = err instanceof Error 
-        ? err.message 
-        : 'Failed to fetch leads';
       
-      setError(errorMessage);
-      console.error('Leads fetch error:', errorMessage);
-      return null;
+      if ('data' in response) {
+        setLeads(response.data.listLeads.items);
+      }
+    } catch (err) {
+      console.error('Error fetching leads:', err);
+      setError(err instanceof Error ? err.message : 'Failed to fetch leads');
     } finally {
       setLoading(false);
     }
   }, []);
 
-  return { 
-    leads, 
-    loading, 
-    error, 
-    fetchLeads 
-  };
-};
+  return { leads, loading, error, fetchLeads };
+}

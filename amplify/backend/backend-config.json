@@ -1,43 +1,54 @@
 {
-  "api": {
-    "nexvatoadmin": {
-      "dependsOn": [],
-      "output": {
-        "authConfig": {
-          "additionalAuthenticationProviders": [],
-          "defaultAuthentication": {
-            "authenticationType": "AWS_IAM"
+    "api": {
+      "nexvatoadmin": {
+        "dependsOn": [
+          {
+            "category": "auth",
+            "resourceName": "nexvatoadmin",
+            "attributes": [
+              "UserPoolId"
+            ]
           }
-        }
-      },
-      "providerPlugin": "awscloudformation",
-      "service": "AppSync"
-    }
-  },
-  "auth": {
-    "nexvatoadminf7be5032": {
-      "customAuth": false,
-      "dependsOn": [],
-      "frontendAuthConfig": {
-        "mfaConfiguration": "OFF",
-        "mfaTypes": [
-          "SMS"
         ],
-        "passwordProtectionSettings": {
-          "passwordPolicyCharacters": [],
-          "passwordPolicyMinLength": 8
+        "output": {
+          "authConfig": {
+            "additionalAuthenticationProviders": [],
+            "defaultAuthentication": {
+              "authenticationType": "AMAZON_COGNITO_USER_POOLS"
+            }
+          }
         },
-        "signupAttributes": [
-          "EMAIL"
-        ],
-        "socialProviders": [],
-        "usernameAttributes": [],
-        "verificationMechanisms": [
-          "EMAIL"
-        ]
-      },
-      "providerPlugin": "awscloudformation",
-      "service": "Cognito"
-    }
+        "providerPlugin": "awscloudformation",
+        "service": "AppSync"
+      }
+    },
+    "auth": {
+      "nexvatoadmin": {
+        "customAuth": false,
+        "dependsOn": [],
+        "frontendAuthConfig": {
+          "mfaConfiguration": "OFF",
+          "mfaTypes": [
+            "SMS"
+          ],
+          "passwordProtectionSettings": {
+            "passwordPolicyCharacters": [],
+            "passwordPolicyMinLength": 8
+          },
+          "signupAttributes": [
+            "EMAIL"
+          ],
+          "socialProviders": [],
+          "usernameAttributes": [
+            "EMAIL"
+          ],
+          "verificationMechanisms": [
+            "EMAIL"
+          ]
+        },
+        "providerPlugin": "awscloudformation",
+        "service": "Cognito"
+      }
+    },
+    "version": "1.0"
   }
-}

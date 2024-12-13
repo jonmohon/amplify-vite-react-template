@@ -1,40 +1,34 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useLeads } from '../hooks/useLeads';
 
-const Leads: React.FC = () => {
-  const { leads, fetchLeads, loading, error } = useLeads();
+export default function Leads() {
+  const { leads, loading, error, fetchLeads } = useLeads();
 
   useEffect(() => {
-    const fetchData = async () => {
-      await fetchLeads(); // Fetch the first page of leads
-    };
-    fetchData();
+    fetchLeads();
   }, [fetchLeads]);
 
-  if (loading) {
-    return <div>Loading leads...</div>;
-  }
-
-  if (error) {
-    return <div>Error fetching leads: {error}</div>;
-  }
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div className="error">{error}</div>;
 
   return (
-    <div>
-      <h1>Leads</h1>
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4">Leads</h1>
       {leads.length === 0 ? (
-        <p>No leads available.</p>
+        <p>No leads found</p>
       ) : (
-        <ul>
-          {leads.map(lead => (
-            <li key={lead.leadId}>
-              {lead.firstName} {lead.lastName} - {lead.email}
+        <ul className="space-y-2">
+          {leads.map((lead) => (
+            <li key={lead.id} className="border p-3 rounded">
+              <p>{lead.id}</p>
+              <p className="text-gray-600">{lead.email}</p>
+              <p className="text-sm text-gray-400">
+                {new Date(lead.createdAt).toLocaleDateString()}
+              </p>
             </li>
           ))}
         </ul>
       )}
     </div>
   );
-};
-
-export default Leads;
+}

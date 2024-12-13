@@ -43,7 +43,7 @@ const schema = a.schema({
     conversionSource: a.string(),
     tags: a.string().array(),
     priority: a.string(),
-  }).authorization(allow => [allow.owner()]),
+  }).authorization(allow => [allow.owner(), allow.publicApiKey().to(['read'])]),
 
   Campaign: a.model({
     campaignId: a.id(),
@@ -52,7 +52,7 @@ const schema = a.schema({
     startDate: a.datetime(),
     endDate: a.datetime(),
     leads: a.hasMany("Lead", "campaignId"),
-  }).authorization(allow => [allow.publicApiKey()]),
+  }).authorization(allow => [allow.owner(), allow.publicApiKey().to(['read'])]),
 
   Interaction: a.model({
     interactionId: a.id(),
@@ -103,7 +103,7 @@ export const data = defineData({
   authorizationModes: {
     defaultAuthorizationMode: "userPool",
     apiKeyAuthorizationMode: {
-      expiresInDays: 30,
+      expiresInDays: 30
     }
-  },
+  }
 });
