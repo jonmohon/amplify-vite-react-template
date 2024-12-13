@@ -1,10 +1,8 @@
-// src/graphql/queries.ts
 export const listLeads = /* GraphQL */ `
   query ListLeads {
     listLeads {
       items {
-        leadId
-        ownerId
+        id
         firstName
         lastName
         email
@@ -12,10 +10,7 @@ export const listLeads = /* GraphQL */ `
         company
         jobTitle
         industry
-        leadSource
-        campaignId
         status
-        stage
         createdAt
         updatedAt
       }

@@ -1,18 +1,22 @@
-const AmplifyConfig = {
-  Auth: {
-    Cognito: {
-      userPoolId: process.env.VITE_USER_POOL_ID,
-      userPoolClientId: process.env.VITE_USER_POOL_CLIENT_ID,
-      region: process.env.VITE_AWS_REGION
-    }
-  },
+import config from '../amplify_outputs.json';
+
+export const amplifyConfig = {
   API: {
     GraphQL: {
-      endpoint: process.env.VITE_API_URL,
-      region: process.env.VITE_AWS_REGION,
-      defaultAuthMode: 'userPool'
+      endpoint: config.data.url,
+      region: config.data.aws_region,
+      defaultAuthorizationMode: config.data.default_authorization_type,
+      apiKey: config.data.api_key
+    }
+  },
+  Auth: {
+    Cognito: {
+      userPoolId: config.auth.user_pool_id,
+      userPoolClientId: config.auth.user_pool_client_id,
+      region: config.auth.aws_region,
+      identityPoolId: config.auth.identity_pool_id
     }
   }
 };
 
-export default AmplifyConfig;
+export default amplifyConfig;
