@@ -1,13 +1,8 @@
 import React from 'react';
-import { 
-  BrowserRouter as Router, 
-  Routes, 
-  Route, 
-  Navigate 
-} from 'react-router-dom';
-import { Authenticator } from '@aws-amplify/ui-react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Authenticator, useAuthenticator } from '@aws-amplify/ui-react';
 import { Amplify } from 'aws-amplify';
-import outputs from '../amplify_outputs.json'; // Adjust the path as necessary
+import outputs from '../amplify_outputs.json';
 import '@aws-amplify/ui-react/styles.css';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
@@ -20,7 +15,7 @@ import Leads from './pages/Leads';
 import Reporting from './pages/Reporting';
 import Settings from './pages/Settings';
 import Sms from './pages/Sms';
-import Sidebar from './components/Sidebar'; // Import the Sidebar component
+import Sidebar from './components/Sidebar';
 
 Amplify.configure(outputs);
 
@@ -33,104 +28,41 @@ const theme = createTheme({
 });
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { user, authStatus } = useAuthenticator((context) => [context.user, context.authStatus]);
+  
+  if (authStatus !== 'authenticated') {
+    return <Navigate to="/login" replace />;
+  }
+
   return <>{children}</>;
 };
 
-const App: React.FC = () => {
+function App() {
   return (
-    <Authenticator>
-      {({ user }) => (
-        <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
+      <Authenticator>
+        {({ signOut }) => (
           <Router>
-            <div className="App" style={{ display: 'flex' }}>
-              <Sidebar /> {/* Add the Sidebar component here */}
-              <div style={{ flexGrow: 1 }}>
-                <header>
-                  <h1>Hello {user?.username}</h1>
-                  {/* Sign-out button removed */}
-                </header>
+            <div style={{ display: 'flex' }}>
+              <Sidebar onSignOut={signOut} />
+              <main style={{ flexGrow: 1, padding: '20px' }}>
                 <Routes>
-                  {/* Protected Routes */}
-                  <Route
-                    path="/dashboard"
-                    element={
-                      <ProtectedRoute>
-                        <Dashboard />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/analytics"
-                    element={
-                      <ProtectedRoute>
-                        <Analytics />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/campaigns"
-                    element={
-                      <ProtectedRoute>
-                        <Campaigns />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/email"
-                    element={
-                      <ProtectedRoute>
-                        <Email />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/leads"
-                    element={
-                      <ProtectedRoute>
-                        <Leads />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/reporting"
-                    element={
-                      <ProtectedRoute>
-                        <Reporting />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/settings"
-                    element={
-                      <ProtectedRoute>
-                        <Settings />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/sms"
-                    element={
-                      <ProtectedRoute>
-                        <Sms />
-                      </ProtectedRoute>
-                    }
-                  />
-
-                  {/* Default Redirect for authenticated users */}
-                  <Route
-                    path="*"
-                    element={
-                      <Navigate to="/dashboard" replace />
-                    }
-                  />
+                  <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+                  <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
+                  <Route path="/campaigns" element={<ProtectedRoute><Campaigns /></ProtectedRoute>} />
+                  <Route path="/email" element={<ProtectedRoute><Email /></ProtectedRoute>} />
+                  <Route path="/leads" element={<ProtectedRoute><Leads /></ProtectedRoute>} />
+                  <Route path="/reporting" element={<ProtectedRoute><Reporting /></ProtectedRoute>} />
+                  <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+                  <Route path="/sms" element={<ProtectedRoute><Sms /></ProtectedRoute>} />
                 </Routes>
-              </div>
+              </main>
             </div>
           </Router>
-        </ThemeProvider>
-      )}
-    </Authenticator>
+        )}
+      </Authenticator>
+    </ThemeProvider>
   );
-};
+}
 
 export default App;
