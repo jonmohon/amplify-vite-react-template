@@ -1,32 +1,28 @@
-// amplify/data/resource.ts
-import { a, defineData } from '@aws-amplify/backend';
+import { a, defineData, type ClientSchema } from '@aws-amplify/backend';
+
+const schema = a.schema({
+  Lead: a.model({
+    content: a.string(),
+    firstName: a.string().required(),
+    lastName: a.string().required(),
+    email: a.string().required(),
+    phoneNumber: a.string(),
+    company: a.string(),
+    jobTitle: a.string(),
+    industry: a.string(),
+    status: a.string().default('NEW'),
+    notes: a.string(),
+    customFields: a.json()
+  })
+  .authorization(allow => [allow.publicApiKey()])
+});
+
+export type Schema = ClientSchema<typeof schema>;
 
 export const data = defineData({
-  schema: a.schema({
-    Lead: a.model({
-      id: a.id().required(),
-      firstName: a.string(),
-      lastName: a.string(),
-      email: a.string(),
-      phoneNumber: a.string(),
-      company: a.string(),
-      jobTitle: a.string(),
-      industry: a.string(),
-      leadSource: a.string(),
-      campaignId: a.string(),
-      status: a.string(),
-      stage: a.string(),
-      createdAt: a.datetime().required(),
-      updatedAt: a.datetime()
-    }).authorization([
-      a.allow.owner(),
-      a.allow.public().to(['read'])
-    ])
-  }),
+  schema,
   authorizationModes: {
-    defaultAuthorizationMode: 'userPool',
-    apiKeyAuthorizationMode: {
-      expiresInDays: 30
-    }
+    defaultAuthorizationMode: 'apiKey',
+    apiKeyAuthorizationMode: { expiresInDays: 30 }
   }
 });
