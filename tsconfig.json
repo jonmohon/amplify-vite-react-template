@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "typeRoots": ["node_modules/@types"],
+    "jsx": "react-jsx",
     "target": "ES2020",
     "useDefineForClassFields": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
@@ -10,7 +12,6 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
     "allowSyntheticDefaultImports": true, // <-- Add this line
 
     "strict": true,
